@@ -4,7 +4,6 @@
 #include <string>
 
 #include <Utils.hpp>
-#include <__msvc_filebuf.hpp>
 
 bool selfChecking() {
     std::vector<cl::Platform> all_platforms;
@@ -49,9 +48,8 @@ bool isClFile(const std::string& filePath) {
     return false;
 }
 
-// using file name for sigle kernel function probably is a good idea?
 shared_ptr<string> cl2KernelFunc(const string& cl_path){
-
+    
     std::ifstream file(cl_path);
     // check file is .cl file 
     if(!isClFile(cl_path)) {

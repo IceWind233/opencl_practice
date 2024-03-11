@@ -1,3 +1,6 @@
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
 #include <istream>
 #include <map>
 #include <memory>
@@ -44,7 +47,12 @@ inline void createBuffersHelper(
     (*buffers)[name] = make_unique<cl::Buffer>(buffer);
 }
 
-// a function to create buffers which params are name: string, type: int, size: size_t
+ /**
+ * \brief a function to create buffers
+ * \tparam Arg: string, int, size_t
+ * \param args: name, type, size 
+ * \return 
+ */
 template <typename ...Arg>
 shared_ptr<map<string, unique_ptr<cl::Buffer>>> createBuffers(Arg... args) {
     shared_ptr<map<string, unique_ptr<cl::Buffer>>> buffers = make_shared<map<string, unique_ptr<cl::Buffer>>>();
@@ -52,3 +60,4 @@ shared_ptr<map<string, unique_ptr<cl::Buffer>>> createBuffers(Arg... args) {
     return buffers;
 }
 
+#endif // UTILS_HPP

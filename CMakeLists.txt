@@ -22,6 +22,8 @@ add_executable(
 	main.cpp
 	"src/Utils.cpp"
 	"include/Utils.hpp"
+	"src/Conv.cpp"
+	"include/Conv.hpp"
 )
 
 # Link against OpenDL and OpenCV libraries
