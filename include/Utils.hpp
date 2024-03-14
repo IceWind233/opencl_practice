@@ -9,6 +9,8 @@
 
 using namespace std;
 
+using buffers_t = std::shared_ptr<map<string, unique_ptr<cl::Buffer>>>;
+
 bool selfChecking();
 
 unique_ptr<cl::Device> getDevice(int device_type = CL_DEVICE_TYPE_DEFAULT | CL_DEVICE_TYPE_GPU | CL_DEVICE_TYPE_CPU);
@@ -22,7 +24,7 @@ unique_ptr<cl::Program> str2Program(const cl::Context &ctx, const cl::Device dev
 
 template <typename ...Arg>
 void createBuffersHelper(
-    shared_ptr<map<string, unique_ptr<cl::Buffer>>> buffers,
+    buffers_t buffers,
     const string& name,
     const cl::Context ctx,
     int flag,
@@ -37,7 +39,7 @@ void createBuffersHelper(
 
 template <>
 inline void createBuffersHelper(
-    shared_ptr<map<string, unique_ptr<cl::Buffer>>> buffers,
+    buffers_t buffers,
     const string& name,
     const cl::Context ctx,
     int flag,
@@ -49,13 +51,13 @@ inline void createBuffersHelper(
 
  /**
  * \brief a function to create buffers
- * \tparam Arg: string, int, size_t
- * \param args: name, type, size 
+ * \tparam Arg: string, cl::Context, int, size_t
+ * \param args: name, ctx, type, size 
  * \return 
  */
 template <typename ...Arg>
-shared_ptr<map<string, unique_ptr<cl::Buffer>>> createBuffers(Arg... args) {
-    shared_ptr<map<string, unique_ptr<cl::Buffer>>> buffers = make_shared<map<string, unique_ptr<cl::Buffer>>>();
+buffers_t createBuffers(Arg... args) {
+    buffers_t buffers = make_shared<map<string, unique_ptr<cl::Buffer>>>();
     createBuffersHelper(buffers, args...);
     return buffers;
 }

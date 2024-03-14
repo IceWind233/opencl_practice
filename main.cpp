@@ -1,29 +1,38 @@
 #include <iostream>
+#include <chrono>
+
 #include <CL/opencl.hpp>
 
 #include "Utils.hpp"
 #include "Conv.hpp"
+#include "MNIST.hpp"
+
+struct data_loader {
+    std::vector<int> label{};
+    std::vector<std::array<int, kImageSize>> image{};
+};
+
 
 int main(){
-    auto device = getDevice(CL_DEVICE_TYPE_GPU);
-    cl::Context context({*device});
+    const string weight = "D:/Fragments/DLTest/asset/weight.txt";
+    const string bias = "D:/Fragments/DLTest/asset/bias.txt";
 
-	cv::Mat mat = cv::imread("D:/DeepSORT/asset/bus.jpg", cv::IMREAD_GRAYSCALE);
+	Mnist mnist(weight, bias);
 
-    Kernel kernel = {new float[9], 3, 3};
+    for (int i = 0; i < 10; i++) {
+        stringstream ss;
+        ss << "D:/Fragments/DLTest/asset/" << i << ".jpg";
 
-    for (size_t i = 0; i < kernel.height(); i++) {
-        for (size_t j = 0; j < kernel.width(); j++) {
-	        kernel.data()[i * kernel.width() + j] = 1.0f;
-		}
-    }
+        auto start = std::chrono::high_resolution_clock::now();
 
-    cv::Mat output;
-    Conv()(context, device, mat, kernel, output);
+        auto res = mnist.predict(ss.str());
 
-    cv::namedWindow("output", cv::WINDOW_NORMAL);
-    imshow("output", output);
-    cv::waitKey(0); 
+		std::cout << "Test " << i << " : " << res << std::endl;
+
+        auto end = std::chrono::high_resolution_clock::now();
+
+        std::cout << " time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+	}
 
     return 0;
 }

@@ -24,7 +24,10 @@ add_executable(
 	"include/Utils.hpp"
 	"src/Conv.cpp"
 	"include/Conv.hpp"
+	"src/MNIST.cpp"
+	"include/MNIST.hpp"
 )
 
-# Link against OpenDL and OpenCV libraries
+
+# Link against OpenCL and OpenCV libraries
 target_link_libraries(DLTest OpenCL::OpenCL ${OpenCV_LIBS})
